@@ -15,7 +15,7 @@ Release assets contain large binaries; Git history contains their source and
 reproducible build instructions. The release checksum file covers the binary
 assets. The repository-root `SHA256SUMS` covers the upstream source archives.
 
-These prebuilds are a **prerelease**. A large ribosome input exposed a mixed-precision CPU absolute-energy limitation; see the [measured comparison and reproduction commands](validation-logs/ribosome-energy-investigation.md). Full Windows and WSL CUDA physical validation passed; the two CPU physical suites are still in progress. See the [validation record](source/VALIDATION.md) for current scope.
+These prebuilds are a **prerelease**. A large ribosome input exposed a mixed-precision CPU absolute-energy limitation; see the [measured comparison and reproduction commands](validation-logs/ribosome-energy-investigation.md). Full physical validation passed on all four configurations; the measured large-system CPU energy limitation remains open. See the [validation record](source/VALIDATION.md) for current scope.
 
 These wheels bundle both engines and the FFTW/cuFFT libraries. A compiler,
 CMake, or full CUDA Toolkit is not needed to use them. Python 3.10+ is needed;

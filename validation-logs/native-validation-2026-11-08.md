@@ -48,15 +48,28 @@ Reproduce the GPU-host mode matrix with `python source/scripts/validate_modes.py
 
 ## Scope
 
-The tiny smoke fixture and upstream suites do not establish broad scientific accuracy or production performance. External regression suites subsequently passed on all four engines; full physical validation resumed after the requested reboot and remains in progress. Linux was tested through WSL2, not a separate native Linux boot. The wheels are local native development builds, not a manylinux or universal-system portability claim. Local validation is separate from GitHub Actions runs and published releases.
+The tiny smoke fixture and upstream suites do not establish broad scientific accuracy or production performance. External regression suites subsequently passed on all four engines; full physical validation subsequently completed on all four configurations. The large-system CPU absolute-energy limitation below remains open. Linux was tested through WSL2, not a separate native Linux boot. The wheels are local native development builds, not a manylinux or universal-system portability claim. Local validation is separate from GitHub Actions runs and published releases.
 
 
-## Extended validation in progress
+## Completed extended validation
 
-The official 2026.4 regression suite passed on all four engines: 42 complex cases per CPU engine, 88 variants per CUDA engine, and 7 essential-dynamics cases per engine. Native Strawberry Perl avoids the MSYS CRLF comparison problem on Windows.
+The official 2026.4 regression suite passed on all four engines: 42 complex cases per CPU engine, 88 variants per CUDA engine, and 7 essential-dynamics cases per engine. Native Strawberry Perl avoids the MSYS CRLF comparison problem on Windows. No regression tolerances were relaxed.
 
-All four configurations completed both public MPI-NAT benchmarks: membrane, 50,000 steps / 100 ps; ribosome, 2,000 steps / 8 ps. Final energy and temperature were finite and no constraint or runtime failures were detected. The CPU benchmark continuation now correctly requests only steps remaining after its checkpoint. Completion does not establish cross-backend accuracy: the initial ribosome potential is -38,003,952 kJ/mol on both CPU builds and approximately -37,924,736 kJ/mol on both CUDA builds. An independent double-precision reference is stable across 4 and 16 threads; it closely matches CUDA and exposes a large mixed-precision CPU energy limitation. See [the investigation and reproduction commands](ribosome-energy-investigation.md).
+| Configuration | Physical trajectories | Systems | Primary checks | Final result |
+| --- | ---: | ---: | ---: | --- |
+| Windows CPU | 46 / 46 | 14 | 24 | Passed |
+| Windows CUDA | 46 / 46 | 14 | 24 | Passed |
+| WSL CPU | 46 / 46 | 14 | 24 | Passed |
+| WSL CUDA | 46 / 46 | 14 | 24 | Passed |
 
-All four physical-validation jobs resumed after the reboot. Windows and WSL CUDA subsequently each completed all 46 trajectories and passed analysis of all 14 systems and 24 primary checks, with no failed checks. See [the structured results](physical-validation-results.json). All five argon systems passed ensemble and Maxwell-Boltzmann checks in every configuration. Full water-system simulation and final statistical analysis remain pending; no trajectory lengths or thresholds were reduced. Early parallel analyses collided through the upstream parser's fixed temporary filename; isolated reruns cleared those extraction errors. The resume helper now gives each analysis its own current directory.
+All 184 trajectories finished at their original requested lengths, resuming checkpoints where available. All 96 primary checks passed, including integration convergence, ensemble sampling, and Maxwell-Boltzmann tests. Upstream seeds and thresholds were unchanged. [Structured results](physical-validation-results.json) preserve per-system checks and ensemble comparisons. Early parallel analyses collided through the upstream parser's fixed temporary filename; isolated reruns cleared those extraction errors. The resume helper now gives each analysis its own current directory.
 
-The published binaries remain a prerelease while the two CPU physical suites are incomplete and the large-system CPU energy limitation remains unresolved. Generated raw output remains local; see RESTART.md and EXTENDED_VALIDATION.md for continuation and reproduction.
+All four configurations also completed both public MPI-NAT benchmarks: membrane, 50,000 steps / 100 ps; ribosome, 2,000 steps / 8 ps. Native logs verified exact final steps and successful completion, with finite final energy and temperature and no detected constraint/runtime failure. See [all eight results](benchmark-results.json) for input hashes and measurements. These are benchmark inputs rather than a user's production study; trajectories do not establish scientific convergence. Performance was measured under changing shared load.
+
+## Unresolved large-system CPU energy limitation
+
+A same-input zero-step native-engine comparison found initial ribosome potential energy -38,003,952 kJ/mol on both CPU builds versus -37,924,799.115135 kJ/mol in a separate double-precision reference. The reference was stable across four and sixteen threads. CUDA's initial potential was -37,924,736 kJ/mol, much closer to the reference. Direct native commands reproduce the difference without the Python wrapper.
+
+Isolated diagnostic builds widening CPU nonbonded and PME energy accumulators reduced the four-thread CPU discrepancy from about 79,153 to about 45 kJ/mol. The [investigation](ribosome-energy-investigation.md) includes exact measurements, native reproduction commands, limitations, and an experimental patch. That patch is not applied by the builder or included in v0.2.0 assets; it has not passed the full release test matrix. These smaller-system physical passes do not clear the published CPU limitation. The release therefore remains a prerelease.
+
+Both diagnostic CMake caches were corrected to use uv-managed Python and their build checks passed without native recompilation. The build helper now explicitly passes its invoking Python to CMake; all 26 interface/helper tests pass on both OSes. Published binaries and their pinned hashes remain unchanged.

@@ -88,4 +88,4 @@ Biophysics, Max Planck Institute for Multidisciplinary Sciences, Göttingen.
 See [the local validation report](validation-logs/native-validation-2026-11-08.md)
 for the observed results and remaining limits.
 
-Completed physical-suite results are recorded in [structured JSON](validation-logs/physical-validation-results.json). Both CUDA configurations passed all 14 systems and 24 primary checks; CPU suites remain in progress. The large-system [CPU energy-accumulation investigation](validation-logs/ribosome-energy-investigation.md) is a separate limitation that these smaller-system passes do not clear.
+Completed physical-suite results are recorded in [structured JSON](validation-logs/physical-validation-results.json). All four configurations completed 46 trajectories and passed all 14 systems and 24 primary checks each. The large-system [CPU energy-accumulation investigation](validation-logs/ribosome-energy-investigation.md) is a separate limitation that these smaller-system passes do not clear.

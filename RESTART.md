@@ -1,35 +1,27 @@
-# Restart handoff - 8 November 2026
+# Completed validation handoff
 
-> **Current status, 8 November 2026 at 22:35 CST:** all eight large benchmark runs completed. Windows and WSL CUDA physical validation each passed all 14 systems after completing 46/46 trajectories. The two CPU physical suites are active. Do not launch duplicate resume commands while their job states are `running`.
+As of 2026-11-08 22:57 -0600, all six resumed jobs finished with exit code 0. No validation simulations remain active. Preserve `.native/`, the uv environments, and `/home/gavi/gromacs-unified-build` for raw output and reproduction.
 
-NVIDIA driver 621.14 passed Windows and WSL CUDA smoke tests after the reboot. Durable job states are in `.native/validation-jobs/*.state.json`, with output in `validation-logs/resumed-*.log`. Preserve `.native/`, the uv virtual environments, and `/home/gavi/gromacs-unified-build` in WSL.
+## Final results
 
-## Completed validation
-
-- Windows CPU and CUDA: all 86 upstream CTest suites per engine.
-- WSL CPU and CUDA: all 94 upstream CTest suites per engine.
+- Windows CPU/CUDA: 86 upstream CTest suites passed per engine.
+- WSL CPU/CUDA: 94 upstream CTest suites passed per engine.
 - External regression: CPU engines each passed 42 complex + 7 essential-dynamics cases; CUDA engines each passed 88 complex variants + 7 essential-dynamics cases.
-- Python interface/helpers: 26 tests pass on each OS; GitHub CI passes.
-- Python/CLI smoke matrix passed CPU, CUDA, auto GPU, and hidden-GPU CPU fallback.
-- All four configurations completed both MPI-NAT benchmarks: membrane 50,000 steps / 100 ps; ribosome 2,000 steps / 8 ps. Energies and temperatures are finite and logs contain no detected constraint/runtime failures.
-- Windows and WSL CUDA physical validation: each completed 46 trajectories, all 14 systems and all 24 primary checks passed.
+- Full physical validation: all four configurations completed 46/46 trajectories, all 14 systems and 24 primary checks passed per configuration. No lengths, seeds, or thresholds were reduced.
+- Python interface/helpers: all 26 tests pass on both OSes. Python/CLI CPU, CUDA, auto GPU, and hidden-GPU fallback checks passed.
+- All eight large MPI-NAT benchmark runs completed: membrane 50,000 steps / 100 ps; ribosome 2,000 steps / 8 ps. Native logs verify exact final steps, finite energies/temperatures, and no detected constraint/runtime failures.
 
-A separate comparison exposed a large-system mixed-precision CPU absolute-energy limitation, independently of the wrapper. See [the investigation](validation-logs/ribosome-energy-investigation.md). The release remains a prerelease; benchmark execution is not a cross-backend accuracy pass.
+See [physical results](validation-logs/physical-validation-results.json), [benchmark results](validation-logs/benchmark-results.json), and [the validation report](validation-logs/native-validation-2026-11-08.md).
 
-## Physical-validation snapshot
+## Remaining accuracy limitation
 
-| Configuration | Completed trajectories | Final analysis |
-| --- | --- | --- |
-| Windows CPU | 41 / 46 | Pending |
-| Windows CUDA | 46 / 46 | All 14 systems passed |
-| WSL CPU | 43 / 46 | Pending |
-| WSL CUDA | 46 / 46 | All 14 systems passed |
+The release remains a prerelease. The large ribosome input exposed a native mixed-precision CPU absolute-energy limitation, independently of the wrapper. A controlled accumulator correction nearly eliminates the discrepancy in an isolated WSL diagnostic, but that experimental patch is not in the published assets and has not passed the release matrix. See [the investigation](validation-logs/ribosome-energy-investigation.md). Full small-system physical passes do not clear this limitation.
 
-Counts are a timestamped snapshot, not a live display. Integrator checks and all five argon systems passed on all four configurations. Further water systems passed individually, but a partial analysis is not a full suite pass. Original trajectory lengths and thresholds are unchanged.
+## Continuation details
 
-The benchmark continuation helper was corrected to pass only missing steps: GROMACS interprets `-nsteps` relative to the checkpoint. Three helper tests cover this; the physical continuation uses no step override. Parallel analysis now uses a distinct current directory per configuration because the upstream parser uses a fixed temporary XVG filename.
+After the reboot, driver 621.14 passed Windows/WSL CUDA smoke checks. Job states and times are in `.native/validation-jobs/*.state.json`; logs are `validation-logs/resumed-*.log`. The corrected benchmark continuation passes only steps missing after its checkpoint. Analysis uses a distinct current directory per configuration to avoid the upstream parser's temporary-file collision. CMake now receives the invoking uv Python explicitly.
 
-## Resume Windows
+## Optional recheck on Windows
 
 From `C:\Users\Yoshi\projects\gromacs-unified`:
 
@@ -43,9 +35,9 @@ python source/scripts/benchmark_runtime.py --inputs .native/benchmarks --output 
 The physical resume helper skips completed trajectories, continues checkpoints,
 and starts unstarted trajectories. It retains original lengths and thresholds,
 then invokes the unchanged upstream analysis. Resume-helper syntax was checked;
-the resumed runs are active after the requested stop. Check job state before starting any duplicate command.
+all resumed runs have completed. Use these commands only for an intentional recheck.
 
-## Resume WSL
+## Optional recheck on WSL
 
 In Ubuntu, from `/mnt/c/Users/Yoshi/projects/gromacs-unified`:
 

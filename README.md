@@ -9,7 +9,7 @@ and install the native engines; the Python interface alone does not include them
 
 Download a tested platform wheel and `SHA256SUMS` from
 [GitHub Releases](https://github.com/guvi-mug/gromacs-unified/releases/tag/v0.2.0).
-These prebuilds are a **prerelease**. A large ribosome input exposed a mixed-precision CPU absolute-energy limitation; see the [measured comparison and reproduction commands](validation-logs/ribosome-energy-investigation.md). Full Windows and WSL CUDA physical validation passed; the two CPU physical suites are still in progress. See the [validation record](source/VALIDATION.md) for current scope.
+These prebuilds are a **prerelease**. A large ribosome input exposed a mixed-precision CPU absolute-energy limitation; see the [measured comparison and reproduction commands](validation-logs/ribosome-energy-investigation.md). Full physical validation passed on all four configurations; the measured large-system CPU energy limitation remains open. See the [validation record](source/VALIDATION.md) for current scope.
 
 Each wheel includes the CLI, Python library, CPU engine, CUDA engine, and
 FFTW/cuFFT runtime libraries. You need uv/Python and the platform runtime;
