@@ -23,3 +23,7 @@ Python wrapper.
 After these changes, all 86 native Windows CPU CTest suites passed locally.
 The unmodified Linux CPU source passed all 94 Linux CTest suites. CUDA results
 are recorded separately in the root validation reports.
+
+## Experimental energy-accumulation diagnostic
+
+`experimental-energy-accumulation.patch` is a separate, **unreleased** candidate for the large-system CPU energy-accumulation limitation. The builder does not apply it. It was built only in an isolated WSL CPU diagnostic; it has not passed the release test matrix. Do not treat it as a validated replacement for the published engines. See the [measurements, scope, and reproduction commands](../../validation-logs/ribosome-energy-investigation.md).
