@@ -4,7 +4,7 @@
 > NVIDIA driver 621.14. Both Windows and WSL CUDA smoke tests passed. Background
 > job states are in `.native/validation-jobs/*.state.json`, with output in
 > `validation-logs/resumed-*.log`. Do not launch duplicate resume commands while
-> these jobs are running. The stopped-state counts below are historical.
+> these jobs are running. Both CPU benchmark jobs have since completed. The stopped-state counts below are historical.
 >
 > The benchmark resume helper was corrected to pass only the missing steps:
 > GROMACS interprets `-nsteps` relative to the checkpoint. A checkpoint at
@@ -23,12 +23,14 @@ environments, or `/home/gavi/gromacs-unified-build` in WSL.
 - WSL CPU and CUDA: all 94 upstream suites passed for each engine.
 - External regression: CPU engines each passed 42 complex + 7 essential-dynamics
   cases; CUDA engines each passed 88 complex variants + 7 essential-dynamics cases.
-- Python interface: 23 tests passed on each OS; GitHub CI also passed all four jobs.
+- Python interface: 26 tests passed on each OS; GitHub CI also passed all four jobs.
 - Python/CLI smoke matrix passed CPU, CUDA, auto GPU, and hidden-GPU CPU fallback.
 - Both CUDA engines finished the membrane benchmark (50,000 steps, 100 ps)
   and ribosome benchmark (2,000 steps, 8 ps), with finite energies/temperatures.
-- WSL CPU completed the membrane benchmark. CPU benchmark completion remains
-  incomplete overall; checkpoints preserve the interrupted work.
+- Both CPU engines have now completed both benchmark systems as well. All eight
+  large runs reached their requested final steps with finite energies/temperatures.
+- A CPU/CUDA difference in initial ribosome potential energy is being investigated;
+  successful execution alone does not establish cross-backend accuracy.
 
 ## Physical validation remains incomplete
 
@@ -58,7 +60,7 @@ python source/scripts/benchmark_runtime.py --inputs .native/benchmarks --output 
 The physical resume helper skips completed trajectories, continues checkpoints,
 and starts unstarted trajectories. It retains original lengths and thresholds,
 then invokes the unchanged upstream analysis. Resume-helper syntax was checked;
-the resumed runs have not yet been executed after the requested stop.
+the resumed runs are active after the requested stop. Check job state before starting any duplicate command.
 
 ## Resume WSL
 

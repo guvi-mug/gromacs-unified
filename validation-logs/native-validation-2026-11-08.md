@@ -1,6 +1,6 @@
 # Validation record — 8 November 2026
 
-Native Windows and Ubuntu 26.04 under WSL2 were tested on this computer with an NVIDIA GeForce RTX 5080 laptop GPU and Windows driver 592.02.
+Native Windows and Ubuntu 26.04 under WSL2 were tested on this computer with an NVIDIA GeForce RTX 5080 laptop GPU and Windows driver 592.02 initially; post-reboot CUDA smoke checks passed with driver 621.14.
 
 | Configuration | Build and upstream checks | Python API + CLI |
 | --- | --- | --- |
@@ -9,7 +9,7 @@ Native Windows and Ubuntu 26.04 under WSL2 were tested on this computer with an 
 | WSL Linux CPU / GCC 13.4 | Passed all 94 CTest suites | Passed CPU mode |
 | WSL Linux CUDA 13.5 / SM 120 | Passed all 94 CTest suites | Passed CUDA, auto GPU, and auto with GPU hidden |
 
-The Python interface unit suite now has 23 tests, including tampered-download rejection. All 21 potential-energy samples from the Python API and CLI matched in every mode. The final potential was -0.350656 kJ/mol. Native logs confirmed GPU nonbonded work for CUDA/auto and CPU work for forced CPU and hidden-GPU fallback.
+The Python interface unit suite now has 26 tests, including tampered-download rejection. All 21 potential-energy samples from the Python API and CLI matched in every mode. The final potential was -0.350656 kJ/mol. Native logs confirmed GPU nonbonded work for CUDA/auto and CPU work for forced CPU and hidden-GPU fallback.
 
 Both platform wheels were installed into uv-managed virtual environments. Both engines were discovered without explicit paths. Windows uses Python 3.14.7 and WSL uses Python 3.14.4. The Windows build uses Visual Studio 2026/MSVC 19.51, CMake 4.4.5, static FFTW 3.3.10, and CUDA 13.5. WSL uses GCC 13.4, CMake 4.2.3, system FFTW, and CUDA 13.5.
 
@@ -48,9 +48,15 @@ Reproduce the GPU-host mode matrix with `python source/scripts/validate_modes.py
 
 ## Scope
 
-The tiny smoke fixture and upstream suites do not establish broad scientific accuracy or production performance. External regression suites subsequently passed on all four engines; full physical validation was stopped for the requested reboot. Linux was tested through WSL2, not a separate native Linux boot. The wheels are local native development builds, not a manylinux or universal-system portability claim. Local validation is separate from GitHub Actions runs and published releases.
+The tiny smoke fixture and upstream suites do not establish broad scientific accuracy or production performance. External regression suites subsequently passed on all four engines; full physical validation resumed after the requested reboot and remains in progress. Linux was tested through WSL2, not a separate native Linux boot. The wheels are local native development builds, not a manylinux or universal-system portability claim. Local validation is separate from GitHub Actions runs and published releases.
 
 
 ## Extended validation in progress
 
-The official 2026.4 regression suite passed on all four engines: 42 complex cases per CPU engine, 88 variants per CUDA engine, and 7 essential-dynamics cases per engine. Native Strawberry Perl avoids the MSYS CRLF comparison problem on Windows. The four physical-validation jobs were stopped and checkpointed for the requested reboot. Fully completed trajectory counts were Windows CPU 24/46, Windows CUDA 24/46, WSL CPU 31/46, and WSL CUDA 19/46; final statistical analysis remains incomplete. Windows and WSL CUDA each completed the 50,000-step membrane and 2,000-step ribosome benchmarks with finite final energy and temperature; WSL CPU also finished the membrane run; the remaining CPU benchmark work is checkpointed. See RESTART.md for resumption. The binaries are published as a prerelease; incomplete physical validation is not a pass.
+The official 2026.4 regression suite passed on all four engines: 42 complex cases per CPU engine, 88 variants per CUDA engine, and 7 essential-dynamics cases per engine. Native Strawberry Perl avoids the MSYS CRLF comparison problem on Windows.
+
+All four configurations completed both public MPI-NAT benchmarks: membrane, 50,000 steps / 100 ps; ribosome, 2,000 steps / 8 ps. Final energy and temperature were finite and no constraint or runtime failures were detected. The CPU benchmark continuation now correctly requests only steps remaining after its checkpoint. Completion does not establish cross-backend accuracy: the initial ribosome potential is -38,003,952 kJ/mol on both CPU builds and approximately -37,924,736 kJ/mol on both CUDA builds. Controlled native calculations are investigating this difference.
+
+All four physical-validation jobs resumed after the reboot. All five argon systems passed ensemble and Maxwell–Boltzmann checks in every configuration. Full water-system simulation and final statistical analysis remain pending; no trajectory lengths or thresholds were reduced. Early parallel analyses collided through the upstream parser's fixed temporary filename; isolated reruns cleared those extraction errors. The resume helper now gives each analysis its own current directory.
+
+The published binaries remain a prerelease while physical validation and the ribosome energy investigation are incomplete. Generated raw output remains local; see RESTART.md and EXTENDED_VALIDATION.md for continuation and reproduction.
