@@ -46,6 +46,13 @@ with WSL. For CUDA prepare a separate JSON with `--backend cuda`, select the
 CUDA executable, and choose a new working directory. Setting `MPLBACKEND=Agg`
 avoids opening plot windows during analysis.
 
+When analyzing configurations concurrently, give every analysis process a
+different current working directory as well as a different `--wd`. The upstream
+parser uses a fixed temporary XVG filename in its current directory. The resume
+helper now selects the configuration's own directory for the analysis subprocess.
+Sharing a current directory caused extraction collisions in early parallel
+analysis attempts; rerunning in isolated directories cleared those errors.
+
 The JSON retains all upstream systems, trajectory lengths, random seeds, and
 statistical thresholds. Only thread count and CPU/GPU placement are selected.
 The full single-precision configuration contains 14 systems and 46 simulation

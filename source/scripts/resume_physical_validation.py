@@ -50,4 +50,5 @@ for number, mdp in enumerate(inputs, 1):
 source = args.engine_source.resolve() / 'tests/physicalvalidation'
 subprocess.run([sys.executable, str(source / 'gmx_physicalvalidation.py'),
                 str(source / 'systems.json'), '--gmx', str(gmx),
-                '--wd', str(args.work.resolve()), '-a'], env=env, check=True)
+                '--wd', str(args.work.resolve()), '-a'], env=env,
+               cwd=args.work.resolve(), check=True)
