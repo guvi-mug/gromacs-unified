@@ -1,0 +1,515 @@
+{
+  "updated_utc": "2026-11-09T04:34:36.241575+00:00",
+  "engine": "GROMACS 2026.4",
+  "precision": "mixed",
+  "upstream_archive_sha256": "58eda60979b124fcf9dff8b1b63cedfbc72fdb36d99e921dc1bdc310571098b6",
+  "scope": "Original single-precision upstream physical-validation lengths, seeds and thresholds; four OpenMP threads per simulation. Published engines, without the experimental energy-accumulation patch.",
+  "configurations": {
+    "windows-physical-cpu": {
+      "status": "running",
+      "platform": "native Windows",
+      "log": "resumed-windows-physical-cpu.log"
+    },
+    "windows-physical-cuda": {
+      "status": "passed",
+      "platform": "native Windows",
+      "log": "resumed-windows-physical-cuda.log",
+      "completed_trajectories": 46,
+      "finished_utc": "2026-11-09T03:57:07.1759807Z",
+      "exit_code": 0,
+      "systems": [
+        {
+          "name": "int_water_md_verlet_none_pme_pme",
+          "checks": [
+            {
+              "test": "IntegratorTest",
+              "result": "PASSED",
+              "detail": "(max deviation = 0.079, tolerance = 0.25)"
+            }
+          ],
+          "ensemble_comparisons": []
+        },
+        {
+          "name": "int_water_md_verlet_none_pme_switch",
+          "checks": [
+            {
+              "test": "IntegratorTest",
+              "result": "PASSED",
+              "detail": "(max deviation = 0.14, tolerance = 0.25)"
+            }
+          ],
+          "ensemble_comparisons": []
+        },
+        {
+          "name": "int_water_md-vv_verlet_none_pme_pme",
+          "checks": [
+            {
+              "test": "IntegratorTest",
+              "result": "PASSED",
+              "detail": "(max deviation = 0.0041, tolerance = 0.25)"
+            }
+          ],
+          "ensemble_comparisons": []
+        },
+        {
+          "name": "int_water_md-vv_verlet_none_pme_switch",
+          "checks": [
+            {
+              "test": "IntegratorTest",
+              "result": "PASSED",
+              "detail": "(max deviation = 0.0064, tolerance = 0.25)"
+            }
+          ],
+          "ensemble_comparisons": []
+        },
+        {
+          "name": "ens_argon_md_verlet_pme_vr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.335883, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=6.0 --dpress=0.0 : PASSED (0.6 quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_argon_md_verlet_pme_vr_pr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.911486, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=3.0 --dpress=0.0 : PASSED (0.9 quantiles off)",
+            "--dtemp=0.0 --dpress=75.0 : PASSED (1.1 quantiles off)",
+            "--dtemp=3.0 --dpress=75.0 : PASSED ([0.2, 0.9] quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_argon_md_verlet_pme_vr_cr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.633645, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=3.0 --dpress=0.0 : PASSED (1.8 quantiles off)",
+            "--dtemp=0.0 --dpress=75.0 : PASSED (0.7 quantiles off)",
+            "--dtemp=3.0 --dpress=75.0 : PASSED ([0.6, 0.0] quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_argon_md-vv_verlet_pme_nh_mttk",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.609824, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=3.0 --dpress=0.0 : PASSED (0.8 quantiles off)",
+            "--dtemp=0.0 --dpress=75.0 : PASSED (0.6 quantiles off)",
+            "--dtemp=3.0 --dpress=75.0 : PASSED ([0.5, 0.8] quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_argon_md-vv_verlet_pme_vr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.34912, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=6.0 --dpress=0.0 : PASSED (2.4 quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_water_md_verlet_settle_pme_vr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.595863, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=9.0 --dpress=0.0 : PASSED (0.6 quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_water_md_verlet_settle_pme_vr_pr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.833578, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=8.0 --dpress=0.0 : PASSED (0.3 quantiles off)",
+            "--dtemp=0.0 --dpress=300.0 : PASSED (1.9 quantiles off)",
+            "--dtemp=8.0 --dpress=300.0 : PASSED ([1.6, 0.6] quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_water_md_verlet_settle_pme_vr_cr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.966476, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=8.0 --dpress=0.0 : PASSED (2.2 quantiles off)",
+            "--dtemp=0.0 --dpress=300.0 : PASSED (2.0 quantiles off)",
+            "--dtemp=8.0 --dpress=300.0 : PASSED ([0.6, 0.7] quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_water_md-vv_verlet_none_pme_nh_mttk",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.593329, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=8.0 --dpress=0.0 : PASSED (2.2 quantiles off)",
+            "--dtemp=0.0 --dpress=350.0 : PASSED (1.5 quantiles off)",
+            "--dtemp=8.0 --dpress=350.0 : PASSED ([0.4, 1.9] quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_water_md-vv_verlet_settle_pme_vr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.428035, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=9.0 --dpress=0.0 : PASSED (1.1 quantiles off)"
+          ]
+        }
+      ],
+      "system_count": 14,
+      "primary_check_count": 24
+    },
+    "linux-physical-cpu": {
+      "status": "running",
+      "platform": "Ubuntu 26.04 WSL2",
+      "log": "resumed-linux-physical-cpu.log"
+    },
+    "linux-physical-cuda": {
+      "status": "passed",
+      "platform": "Ubuntu 26.04 WSL2",
+      "log": "resumed-linux-physical-cuda.log",
+      "completed_trajectories": 46,
+      "finished_utc": "2026-11-09T04:33:12.6964713Z",
+      "exit_code": 0,
+      "systems": [
+        {
+          "name": "int_water_md_verlet_none_pme_pme",
+          "checks": [
+            {
+              "test": "IntegratorTest",
+              "result": "PASSED",
+              "detail": "(max deviation = 0.047, tolerance = 0.25)"
+            }
+          ],
+          "ensemble_comparisons": []
+        },
+        {
+          "name": "int_water_md_verlet_none_pme_switch",
+          "checks": [
+            {
+              "test": "IntegratorTest",
+              "result": "PASSED",
+              "detail": "(max deviation = 0.027, tolerance = 0.25)"
+            }
+          ],
+          "ensemble_comparisons": []
+        },
+        {
+          "name": "int_water_md-vv_verlet_none_pme_pme",
+          "checks": [
+            {
+              "test": "IntegratorTest",
+              "result": "PASSED",
+              "detail": "(max deviation = 0.0084, tolerance = 0.25)"
+            }
+          ],
+          "ensemble_comparisons": []
+        },
+        {
+          "name": "int_water_md-vv_verlet_none_pme_switch",
+          "checks": [
+            {
+              "test": "IntegratorTest",
+              "result": "PASSED",
+              "detail": "(max deviation = 0.006, tolerance = 0.25)"
+            }
+          ],
+          "ensemble_comparisons": []
+        },
+        {
+          "name": "ens_argon_md_verlet_pme_vr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.925423, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=6.0 --dpress=0.0 : PASSED (1.8 quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_argon_md_verlet_pme_vr_pr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.469916, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=3.0 --dpress=0.0 : PASSED (1.1 quantiles off)",
+            "--dtemp=0.0 --dpress=75.0 : PASSED (0.2 quantiles off)",
+            "--dtemp=3.0 --dpress=75.0 : PASSED ([1.0, 1.4] quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_argon_md_verlet_pme_vr_cr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.0895912, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=3.0 --dpress=0.0 : PASSED (0.5 quantiles off)",
+            "--dtemp=0.0 --dpress=75.0 : PASSED (2.1 quantiles off)",
+            "--dtemp=3.0 --dpress=75.0 : PASSED ([1.6, 2.2] quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_argon_md-vv_verlet_pme_nh_mttk",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.658036, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=3.0 --dpress=0.0 : PASSED (1.4 quantiles off)",
+            "--dtemp=0.0 --dpress=75.0 : PASSED (0.8 quantiles off)",
+            "--dtemp=3.0 --dpress=75.0 : PASSED ([0.3, 0.3] quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_argon_md-vv_verlet_pme_vr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.0341435, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=6.0 --dpress=0.0 : PASSED (0.4 quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_water_md_verlet_settle_pme_vr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.401758, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=9.0 --dpress=0.0 : PASSED (1.0 quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_water_md_verlet_settle_pme_vr_pr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.662881, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=8.0 --dpress=0.0 : PASSED (0.3 quantiles off)",
+            "--dtemp=0.0 --dpress=300.0 : PASSED (0.7 quantiles off)",
+            "--dtemp=8.0 --dpress=300.0 : PASSED ([0.1, 1.5] quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_water_md_verlet_settle_pme_vr_cr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.836423, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=8.0 --dpress=0.0 : PASSED (0.2 quantiles off)",
+            "--dtemp=0.0 --dpress=300.0 : PASSED (0.6 quantiles off)",
+            "--dtemp=8.0 --dpress=300.0 : PASSED ([0.2, 0.4] quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_water_md-vv_verlet_none_pme_nh_mttk",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.218464, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=8.0 --dpress=0.0 : PASSED (0.6 quantiles off)",
+            "--dtemp=0.0 --dpress=350.0 : PASSED (2.1 quantiles off)",
+            "--dtemp=8.0 --dpress=350.0 : PASSED ([0.3, 0.3] quantiles off)"
+          ]
+        },
+        {
+          "name": "ens_water_md-vv_verlet_settle_pme_vr",
+          "checks": [
+            {
+              "test": "EnsembleTest",
+              "result": "PASSED",
+              "detail": "(tolerance: 4.0 quantiles)"
+            },
+            {
+              "test": "MaxwellBoltzmannTest",
+              "result": "PASSED",
+              "detail": "(p = 0.894556, alpha = 0.010000)"
+            }
+          ],
+          "ensemble_comparisons": [
+            "--dtemp=9.0 --dpress=0.0 : PASSED (0.1 quantiles off)"
+          ]
+        }
+      ],
+      "system_count": 14,
+      "primary_check_count": 24
+    }
+  }
+}
