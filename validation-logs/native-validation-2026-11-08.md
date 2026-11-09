@@ -1,4 +1,4 @@
-# Validation record — 8 November 2026
+# Validation record â€” 8 November 2026
 
 Native Windows and Ubuntu 26.04 under WSL2 were tested on this computer with an NVIDIA GeForce RTX 5080 laptop GPU and Windows driver 592.02 initially; post-reboot CUDA smoke checks passed with driver 621.14.
 
@@ -55,8 +55,8 @@ The tiny smoke fixture and upstream suites do not establish broad scientific acc
 
 The official 2026.4 regression suite passed on all four engines: 42 complex cases per CPU engine, 88 variants per CUDA engine, and 7 essential-dynamics cases per engine. Native Strawberry Perl avoids the MSYS CRLF comparison problem on Windows.
 
-All four configurations completed both public MPI-NAT benchmarks: membrane, 50,000 steps / 100 ps; ribosome, 2,000 steps / 8 ps. Final energy and temperature were finite and no constraint or runtime failures were detected. The CPU benchmark continuation now correctly requests only steps remaining after its checkpoint. Completion does not establish cross-backend accuracy: the initial ribosome potential is -38,003,952 kJ/mol on both CPU builds and approximately -37,924,736 kJ/mol on both CUDA builds. Controlled native calculations are investigating this difference.
+All four configurations completed both public MPI-NAT benchmarks: membrane, 50,000 steps / 100 ps; ribosome, 2,000 steps / 8 ps. Final energy and temperature were finite and no constraint or runtime failures were detected. The CPU benchmark continuation now correctly requests only steps remaining after its checkpoint. Completion does not establish cross-backend accuracy: the initial ribosome potential is -38,003,952 kJ/mol on both CPU builds and approximately -37,924,736 kJ/mol on both CUDA builds. An independent double-precision reference is stable across 4 and 16 threads; it closely matches CUDA and exposes a large mixed-precision CPU energy limitation. See [the investigation and reproduction commands](ribosome-energy-investigation.md).
 
-All four physical-validation jobs resumed after the reboot. All five argon systems passed ensemble and Maxwell–Boltzmann checks in every configuration. Full water-system simulation and final statistical analysis remain pending; no trajectory lengths or thresholds were reduced. Early parallel analyses collided through the upstream parser's fixed temporary filename; isolated reruns cleared those extraction errors. The resume helper now gives each analysis its own current directory.
+All four physical-validation jobs resumed after the reboot. Windows CUDA subsequently completed all 46 trajectories and passed analysis of all 14 systems, with no failed checks. All five argon systems passed ensemble and Maxwellâ€“Boltzmann checks in every configuration. Full water-system simulation and final statistical analysis remain pending; no trajectory lengths or thresholds were reduced. Early parallel analyses collided through the upstream parser's fixed temporary filename; isolated reruns cleared those extraction errors. The resume helper now gives each analysis its own current directory.
 
-The published binaries remain a prerelease while physical validation and the ribosome energy investigation are incomplete. Generated raw output remains local; see RESTART.md and EXTENDED_VALIDATION.md for continuation and reproduction.
+The published binaries remain a prerelease while three physical suites are incomplete and the large-system CPU energy limitation remains unresolved. Generated raw output remains local; see RESTART.md and EXTENDED_VALIDATION.md for continuation and reproduction.

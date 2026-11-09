@@ -1,50 +1,33 @@
-# Restart handoff — 8 November 2026
+# Restart handoff â€” 8 November 2026
 
-> **Resumed:** the six unfinished jobs were restarted after the reboot, with
-> NVIDIA driver 621.14. Both Windows and WSL CUDA smoke tests passed. Background
-> job states are in `.native/validation-jobs/*.state.json`, with output in
-> `validation-logs/resumed-*.log`. Do not launch duplicate resume commands while
-> these jobs are running. Both CPU benchmark jobs have since completed. The stopped-state counts below are historical.
->
-> The benchmark resume helper was corrected to pass only the missing steps:
-> GROMACS interprets `-nsteps` relative to the checkpoint. A checkpoint at
-> step 43,920 now runs 6,080 further steps to reach 50,000. Physical-validation
-> resumes do not use this override and were unaffected. Three regression tests
-> were added; all 26 interface/helper tests pass.
+> **Current status, 8 November 2026 at 22:02 CST:** all eight large benchmark runs completed. Windows CUDA physical validation passed all 14 systems after completing 46/46 trajectories. The other three physical suites are active. Do not launch duplicate resume commands while their job states are `running`.
 
-All active simulation processes were stopped for the requested computer restart.
-Windows received console stop signals; Linux received SIGTERM. Existing outputs
-and checkpoint files are preserved. Do not delete `.native/`, the virtual
-environments, or `/home/gavi/gromacs-unified-build` in WSL.
+NVIDIA driver 621.14 passed Windows and WSL CUDA smoke tests after the reboot. Durable job states are in `.native/validation-jobs/*.state.json`, with output in `validation-logs/resumed-*.log`. Preserve `.native/`, the uv virtual environments, and `/home/gavi/gromacs-unified-build` in WSL.
 
 ## Completed validation
 
-- Windows CPU and CUDA: all 86 upstream suites passed for each engine.
-- WSL CPU and CUDA: all 94 upstream suites passed for each engine.
-- External regression: CPU engines each passed 42 complex + 7 essential-dynamics
-  cases; CUDA engines each passed 88 complex variants + 7 essential-dynamics cases.
-- Python interface: 26 tests passed on each OS; GitHub CI also passed all four jobs.
+- Windows CPU and CUDA: all 86 upstream CTest suites per engine.
+- WSL CPU and CUDA: all 94 upstream CTest suites per engine.
+- External regression: CPU engines each passed 42 complex + 7 essential-dynamics cases; CUDA engines each passed 88 complex variants + 7 essential-dynamics cases.
+- Python interface/helpers: 26 tests pass on each OS; GitHub CI passes.
 - Python/CLI smoke matrix passed CPU, CUDA, auto GPU, and hidden-GPU CPU fallback.
-- Both CUDA engines finished the membrane benchmark (50,000 steps, 100 ps)
-  and ribosome benchmark (2,000 steps, 8 ps), with finite energies/temperatures.
-- Both CPU engines have now completed both benchmark systems as well. All eight
-  large runs reached their requested final steps with finite energies/temperatures.
-- A CPU/CUDA difference in initial ribosome potential energy is being investigated;
-  successful execution alone does not establish cross-backend accuracy.
+- All four configurations completed both MPI-NAT benchmarks: membrane 50,000 steps / 100 ps; ribosome 2,000 steps / 8 ps. Energies and temperatures are finite and logs contain no detected constraint/runtime failures.
+- Windows CUDA physical validation: all 46 trajectories and all 14 systems passed.
 
-## Physical validation remains incomplete
+A separate comparison exposed a large-system mixed-precision CPU absolute-energy limitation, independently of the wrapper. See [the investigation](validation-logs/ribosome-energy-investigation.md). The release remains a prerelease; benchmark execution is not a cross-backend accuracy pass.
 
-| Configuration | Fully completed simulation subruns |
-| --- | --- |
-| Windows CPU | 24 / 46 |
-| Windows CUDA | 24 / 46 |
-| WSL CPU | 31 / 46 |
-| WSL CUDA | 19 / 46 |
+## Physical-validation snapshot
 
-These are trajectory counts, not final suite pass counts. Preliminary integrator
-checks on Windows CPU and WSL CUDA passed, as did the first analyzed Linux CPU
-ensemble and Maxwell–Boltzmann checks. Full final statistical analysis is pending.
-The GitHub binaries are marked **prerelease** for this incomplete validation.
+| Configuration | Completed trajectories | Final analysis |
+| --- | --- | --- |
+| Windows CPU | 37 / 46 | Pending |
+| Windows CUDA | 46 / 46 | All 14 systems passed |
+| WSL CPU | 39 / 46 | Pending |
+| WSL CUDA | 34 / 46 | Pending |
+
+Counts are a timestamped snapshot, not a live display. Integrator checks and all five argon systems passed on all four configurations. Further water systems passed individually, but a partial analysis is not a full suite pass. Original trajectory lengths and thresholds are unchanged.
+
+The benchmark continuation helper was corrected to pass only missing steps: GROMACS interprets `-nsteps` relative to the checkpoint. Three helper tests cover this; the physical continuation uses no step override. Parallel analysis now uses a distinct current directory per configuration because the upstream parser uses a fixed temporary XVG filename.
 
 ## Resume Windows
 
