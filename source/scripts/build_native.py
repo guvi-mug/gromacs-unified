@@ -7,6 +7,7 @@ from pathlib import Path
 import platform
 import shutil
 import subprocess
+import sys
 
 
 def collect_windows_runtime(executable):
@@ -20,6 +21,7 @@ def collect_windows_runtime(executable):
 def commands(source, output, work, backend, args):
     build, prefix = work / backend, output / backend
     configure = ['cmake', '-S', str(source), '-B', str(build),
+                 f'-DPython3_EXECUTABLE={sys.executable}',
                  '-DCMAKE_BUILD_TYPE=Release', f'-DCMAKE_INSTALL_PREFIX={prefix}',
                  f'-DGMX_GPU={"CUDA" if backend == "cuda" else "OFF"}',
                  '-DGMX_MPI=OFF', '-DGMX_THREAD_MPI=ON', '-DGMX_DOUBLE=OFF',

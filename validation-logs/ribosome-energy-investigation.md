@@ -55,10 +55,10 @@ gmx energy -f cpu4.edr -o cpu4.xvg
 
 Select `Potential` and `Coulomb-(SR)` interactively in `gmx energy`. Use a CUDA executable for the GPU command. Use separate working directories or distinct output names. Do not append these calculations to production checkpoints.
 
-The independent reference used the original hash-verified Linux GROMACS 2026.4 source, GCC 13.4, system double-precision FFTW, and:
+The independent reference used the original hash-verified Linux GROMACS 2026.4 source, GCC 13.4, system double-precision FFTW, and the following configuration from the repository root. Both diagnostic CMake caches were corrected to the uv-managed `.venv-wsl` interpreter and their build checks passed without recompiling or relinking native code:
 
 ```bash
-cmake -S /path/to/gromacs-2026.4 -B build-double-reference -DGMX_DOUBLE=ON -DGMX_GPU=OFF -DGMX_MPI=OFF -DBUILD_TESTING=OFF -DGMX_BUILD_UNITTESTS=OFF -DGMX_FFT_LIBRARY=fftw3 -DGMX_SIMD=AVX2_256 -DGMX_EXTERNAL_BLAS=OFF -DGMX_EXTERNAL_LAPACK=OFF -DCMAKE_C_COMPILER=/usr/bin/gcc-13 -DCMAKE_CXX_COMPILER=/usr/bin/g++-13 -DCMAKE_BUILD_TYPE=Release
+cmake -S /path/to/gromacs-2026.4 -B build-double-reference -DGMX_DOUBLE=ON -DGMX_GPU=OFF -DGMX_MPI=OFF -DBUILD_TESTING=OFF -DGMX_BUILD_UNITTESTS=OFF -DGMX_FFT_LIBRARY=fftw3 -DGMX_SIMD=AVX2_256 -DGMX_EXTERNAL_BLAS=OFF -DGMX_EXTERNAL_LAPACK=OFF -DCMAKE_C_COMPILER=/usr/bin/gcc-13 -DCMAKE_CXX_COMPILER=/usr/bin/g++-13 -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE="$PWD/.venv-wsl/bin/python"
 cmake --build build-double-reference --parallel 4
 ```
 

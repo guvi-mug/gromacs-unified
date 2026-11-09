@@ -3,7 +3,9 @@
 Use uv for Python management. The Python package needs Python 3.10 or newer;
 the source-download helper needs Python 3.12 or newer. Run all commands below
 from the repository root. Windows and Linux need separate environments and
-engine builds, even when Linux runs under WSL on the same computer.
+engine builds, even when Linux runs under WSL on the same computer. The native
+build helper passes its current Python interpreter to CMake, so invoke it from
+the activated uv environment.
 
 ## Install a prebuilt release
 

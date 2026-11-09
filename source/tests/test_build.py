@@ -3,6 +3,7 @@ import importlib.util
 import json
 from pathlib import Path
 import platform
+import sys
 import tempfile
 import unittest
 from unittest import mock
@@ -25,6 +26,7 @@ class BuildTests(unittest.TestCase):
         for backend, gpu in [('cpu', 'OFF'), ('cuda', 'CUDA')]:
             commands = builder.commands(Path('source'), Path('runtime'), Path('work'), backend, args)
             self.assertIn('-DGMX_GPU=' + gpu, commands[0])
+            self.assertIn('-DPython3_EXECUTABLE=' + sys.executable, commands[0])
             self.assertIn('-DGMX_BUILD_OWN_FFTW=OFF', commands[0])
             self.assertIn('check', commands[2])
             self.assertIn('--install', commands[3])
