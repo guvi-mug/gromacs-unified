@@ -9,6 +9,8 @@ and install the native engines; the Python interface alone does not include them
 
 Download a tested platform wheel and `SHA256SUMS` from
 [GitHub Releases](https://github.com/guvi-mug/gromacs-unified/releases/tag/v0.2.0).
+These prebuilds are a **prerelease**. A large ribosome input exposed a mixed-precision CPU absolute-energy limitation; see the [measured comparison and reproduction commands](validation-logs/ribosome-energy-investigation.md). Full Windows CUDA physical validation passed; three other physical suites are still in progress. See the [validation record](source/VALIDATION.md) for current scope.
+
 Each wheel includes the CLI, Python library, CPU engine, CUDA engine, and
 FFTW/cuFFT runtime libraries. You need uv/Python and the platform runtime;
 you do not need a compiler, CMake, FFTW installation, or CUDA Toolkit.
@@ -19,7 +21,7 @@ you do not need a compiler, CMake, FFTW installation, or CUDA Toolkit.
 | `gromacs_unified-0.2.0-py3-none-linux_x86_64.whl` | Linux/WSL2 x86-64 with glibc 2.43+, GLIBCXX 3.4.32+, and OpenMP runtime; tested on Ubuntu 26.04 |
 
 GPU mode in these prebuilds targets **SM 120 (RTX 50-series)** and requires a
-compatible NVIDIA driver; driver 592.02 was tested. CPU mode needs no NVIDIA
+compatible NVIDIA driver; drivers 592.02 and 621.14 were tested. CPU mode needs no NVIDIA
 GPU. Build from source for another GPU architecture or an older Linux runtime.
 
 Install the downloaded wheel into a uv environment:
