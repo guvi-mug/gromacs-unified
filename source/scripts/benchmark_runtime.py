@@ -9,6 +9,7 @@ import re
 import time
 
 from gromacs_unified import Gromacs
+from validation_utils import checkpoint_step, remaining_steps
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--inputs', type=Path, required=True)
@@ -30,12 +31,22 @@ for name, steps in [('benchMEM', args.mem_steps), ('benchRIB', args.rib_steps)]:
     old_text = old_log.read_text(encoding='utf-8', errors='replace') if old_log.exists() else ''
     old_steps = re.findall(r'Step\s+Time\s*\n\s*(\d+)', old_text)
     complete = bool(args.resume and old_steps and int(old_steps[-1]) >= steps and 'Finished mdrun' in old_text)
+    checkpoint = work / 'run.cpt'
+    steps_to_run = steps
+    saved_step = None
+    if args.resume and checkpoint.exists() and not complete:
+        dump = engine.command('dump', '-cp', checkpoint, backend='cpu')
+        saved_step = checkpoint_step(dump, engine._environment(dump[0]))
+        steps_to_run = remaining_steps(steps, saved_step)
+        complete = steps_to_run == 0
+        print(json.dumps({'system': name, 'checkpoint_step': saved_step,
+                          'target_step': steps, 'remaining_steps': steps_to_run}), flush=True)
     with (work / 'console.txt').open('a' if args.resume else 'w', encoding='utf-8') as stream:
         import subprocess
-        command = engine.command('mdrun', '-s', tpr, '-deffnm', 'run', '-nsteps', steps,
+        command = engine.command('mdrun', '-s', tpr, '-deffnm', 'run', '-nsteps', steps_to_run,
                                  '-ntmpi', 1, '-ntomp', args.threads, '-pin', 'off',
                                  '-noconfout', backend=args.backend)
-        if args.resume and (work / 'run.cpt').exists():
+        if args.resume and checkpoint.exists():
             command += ['-cpi', 'run.cpt']
         if not complete:
             subprocess.run(command, cwd=work, env=engine._environment(command[0]),
@@ -51,14 +62,19 @@ for name, steps in [('benchMEM', args.mem_steps), ('benchRIB', args.rib_steps)]:
     log = (work / 'run.log').read_text(encoding='utf-8', errors='replace')
     if 'Finished mdrun' not in log:
         raise AssertionError('Native run did not report completion')
+    final_steps = re.findall(r'Step\s+Time\s*\n\s*(\d+)', log)
+    if not final_steps or int(final_steps[-1]) < steps:
+        raise AssertionError('Native run stopped before the requested final step')
     if re.search(r'LINCS WARNING|SHAKE did not converge|Fatal error|Assertion failed', log):
         raise AssertionError('Native log contains a constraint or runtime failure')
-    performance = re.search(r'Performance:\s+([\d.]+)', log)
+    performance = re.findall(r'Performance:\s+([\d.]+)', log)
     row = {'system': name, 'backend': args.backend, 'steps': steps,
-           'elapsed_seconds': elapsed, 'energy_samples': len(samples),
+           'elapsed_seconds_this_invocation': elapsed, 'skipped_completed': complete,
+           'resumed_from_step': saved_step, 'actual_final_step': int(final_steps[-1]),
+           'energy_samples': len(samples),
            'final_time_ps': samples[-1][0], 'final_potential': samples[-1][1],
            'final_temperature': samples[-1][2],
-           'ns_per_day_under_shared_load': float(performance.group(1)) if performance else None,
+           'ns_per_day_under_shared_load': float(performance[-1]) if performance else None,
            'tpr_sha256': hashlib.sha256(tpr.read_bytes()).hexdigest()}
     results.append(row)
     print(json.dumps(row), flush=True)

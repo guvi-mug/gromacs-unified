@@ -1,5 +1,17 @@
 # Restart handoff — 8 November 2026
 
+> **Resumed:** the six unfinished jobs were restarted after the reboot, with
+> NVIDIA driver 621.14. Both Windows and WSL CUDA smoke tests passed. Background
+> job states are in `.native/validation-jobs/*.state.json`, with output in
+> `validation-logs/resumed-*.log`. Do not launch duplicate resume commands while
+> these jobs are running. The stopped-state counts below are historical.
+>
+> The benchmark resume helper was corrected to pass only the missing steps:
+> GROMACS interprets `-nsteps` relative to the checkpoint. A checkpoint at
+> step 43,920 now runs 6,080 further steps to reach 50,000. Physical-validation
+> resumes do not use this override and were unaffected. Three regression tests
+> were added; all 26 interface/helper tests pass.
+
 All active simulation processes were stopped for the requested computer restart.
 Windows received console stop signals; Linux received SIGTERM. Existing outputs
 and checkpoint files are preserved. Do not delete `.native/`, the virtual
