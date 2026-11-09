@@ -1,0 +1,32 @@
+name: GPU hardware validation
+on:
+  workflow_dispatch:
+    inputs:
+      os:
+        description: Self-hosted GPU runner operating system label
+        type: choice
+        options: [Linux, Windows]
+        required: true
+      runtime_root:
+        description: Absolute directory containing built cpu/ and cuda/ engine trees
+        type: string
+        required: true
+jobs:
+  gpu:
+    runs-on: [self-hosted, '${{ inputs.os }}', gpu]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install .
+      - run: python -m unittest discover -s tests -v
+      - name: Validate CPU, automatic, and required CUDA execution
+        env:
+          GMX_RUNTIME_ROOT: ${{ inputs.runtime_root }}
+        run: |
+          python -m gromacs_unified doctor
+          python scripts/smoke_test.py --backend cpu
+          python scripts/smoke_test.py --backend auto
+          python scripts/smoke_test.py --backend cuda

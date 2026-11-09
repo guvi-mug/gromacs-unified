@@ -1,0 +1,51 @@
+# Python environments and generated metadata
+.venv/
+.venv-*/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Downloaded toolchains, upstream sources, native builds, and packaged engines
+.tools/
+.native/
+build/
+dist/
+wheels/
+source/src/gromacs_unified/runtime/
+CMakeCache.txt
+CMakeFiles/
+Testing/
+*.whl
+*.obj
+*.o
+*.pdb
+*.ilk
+
+# Generated validation output (keep authored reports and patch records)
+validation-logs/*.log
+validation-logs/simulations-*/
+
+# Simulation output; checked-in input fixtures remain included
+*.tpr
+*.edr
+*.xtc
+*.trr
+*.cpt
+*.log
+\#*\#
+
+# Local settings and secrets
+.env
+.env.*
+!.env.example
+.aws/
+.codex/
+.agents/
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

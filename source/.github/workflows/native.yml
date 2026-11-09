@@ -1,0 +1,56 @@
+name: Native engines and wheels
+on:
+  workflow_dispatch:
+    inputs:
+      backend:
+        description: Build CPU only or CPU and CUDA
+        type: choice
+        options: [cpu, both]
+        default: cpu
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    env:
+      CMAKE_GENERATOR: Ninja
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: runner.os == 'Windows'
+        with:
+          arch: x64
+          toolset: "14.2" # VS 2019 tools are compatible with CUDA 12.6
+      - uses: Jimver/cuda-toolkit@v0.2.24
+        if: inputs.backend == 'both'
+        with:
+          cuda: '12.6.3'
+          method: network
+      - run: python -m pip install 'cmake>=3.28,<4' ninja build wheel
+      - run: python scripts/fetch_sources.py gromacs
+      - run: python scripts/fetch_sources.py fftw
+      - run: python scripts/build_fftw.py .native/sources/fftw-3.3.10 .native/fftw
+      - run: python scripts/build_native.py .native/sources/gromacs-2026.4 .native/runtime --backend ${{ inputs.backend }} --fftw-prefix .native/fftw --jobs 2
+      - name: Include FFTW license in each engine
+        run: python -c "from pathlib import Path; import shutil; [shutil.copy2('.native/fftw/licenses/FFTW-COPYING', p / 'licenses/FFTW-COPYING') for p in Path('.native/runtime').iterdir() if p.is_dir()]"
+      - run: python -m pip install .
+      - run: python -m unittest discover -s tests -v
+      - run: python scripts/smoke_test.py --runtime-root .native/runtime --backend cpu
+      - run: python scripts/smoke_test.py --runtime-root .native/runtime --backend auto
+      - run: python scripts/stage_runtime.py .native/runtime
+      - run: python -m build --wheel
+      - name: Install and exercise the bundled wheel
+        run: python scripts/verify_wheel.py dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gromacs-unified-${{ runner.os }}-${{ inputs.backend }}
+          path: dist/*.whl
+          if-no-files-found: error
+  # Hosted runners validate CPU and automatic CPU fallback. A separate GPU-host
+  # validation is required before publishing CUDA builds as hardware-tested.

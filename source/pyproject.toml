@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68", "wheel>=0.43"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gromacs-unified"
+version = "0.2.0"
+description = "A shared Python and CLI interface to CPU and CUDA GROMACS engines"
+requires-python = ">=3.10"
+readme = "UNIFIED.md"
+
+[project.scripts]
+gmx-unified = "gromacs_unified.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+gromacs_unified = ["runtime/**/*"]

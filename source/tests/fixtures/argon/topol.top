@@ -1,0 +1,12 @@
+[ defaults ]
+1 2 yes 1.0 1.0
+[ atomtypes ]
+AR 18 39.948 0.0 A 0.3405 0.996
+[ moleculetype ]
+Argon 1
+[ atoms ]
+1 AR 1 AR AR 1 0.0 39.948
+[ system ]
+Two argon particles smoke test
+[ molecules ]
+Argon 2

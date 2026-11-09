@@ -1,0 +1,5 @@
+numpy==1.26.4
+scipy==1.13.1
+pymbar==3.1.0
+matplotlib==3.9.4
+six==1.17.0

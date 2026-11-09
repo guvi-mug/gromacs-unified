@@ -1,0 +1,4 @@
+GROMACS 2026.4 Windows compatibility patch:
+src/gromacs/random/threefry.h: restrict the non-constexpr min() workaround to MSVC 2015 (_MSC_VER <= 1900). Modern MSVC std::shuffle requires constexpr min(). No RNG algorithm or numerical result is changed.
+Original: #if !defined(_MSC_VER)
+Updated:  #if !defined(_MSC_VER) || _MSC_VER > 1900
