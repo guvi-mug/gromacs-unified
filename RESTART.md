@@ -1,6 +1,6 @@
-# Restart handoff â€” 8 November 2026
+# Restart handoff - 8 November 2026
 
-> **Current status, 8 November 2026 at 22:02 CST:** all eight large benchmark runs completed. Windows CUDA physical validation passed all 14 systems after completing 46/46 trajectories. The other three physical suites are active. Do not launch duplicate resume commands while their job states are `running`.
+> **Current status, 8 November 2026 at 22:35 CST:** all eight large benchmark runs completed. Windows and WSL CUDA physical validation each passed all 14 systems after completing 46/46 trajectories. The two CPU physical suites are active. Do not launch duplicate resume commands while their job states are `running`.
 
 NVIDIA driver 621.14 passed Windows and WSL CUDA smoke tests after the reboot. Durable job states are in `.native/validation-jobs/*.state.json`, with output in `validation-logs/resumed-*.log`. Preserve `.native/`, the uv virtual environments, and `/home/gavi/gromacs-unified-build` in WSL.
 
@@ -12,7 +12,7 @@ NVIDIA driver 621.14 passed Windows and WSL CUDA smoke tests after the reboot. D
 - Python interface/helpers: 26 tests pass on each OS; GitHub CI passes.
 - Python/CLI smoke matrix passed CPU, CUDA, auto GPU, and hidden-GPU CPU fallback.
 - All four configurations completed both MPI-NAT benchmarks: membrane 50,000 steps / 100 ps; ribosome 2,000 steps / 8 ps. Energies and temperatures are finite and logs contain no detected constraint/runtime failures.
-- Windows CUDA physical validation: all 46 trajectories and all 14 systems passed.
+- Windows and WSL CUDA physical validation: each completed 46 trajectories, all 14 systems and all 24 primary checks passed.
 
 A separate comparison exposed a large-system mixed-precision CPU absolute-energy limitation, independently of the wrapper. See [the investigation](validation-logs/ribosome-energy-investigation.md). The release remains a prerelease; benchmark execution is not a cross-backend accuracy pass.
 
@@ -20,10 +20,10 @@ A separate comparison exposed a large-system mixed-precision CPU absolute-energy
 
 | Configuration | Completed trajectories | Final analysis |
 | --- | --- | --- |
-| Windows CPU | 37 / 46 | Pending |
+| Windows CPU | 41 / 46 | Pending |
 | Windows CUDA | 46 / 46 | All 14 systems passed |
-| WSL CPU | 39 / 46 | Pending |
-| WSL CUDA | 34 / 46 | Pending |
+| WSL CPU | 43 / 46 | Pending |
+| WSL CUDA | 46 / 46 | All 14 systems passed |
 
 Counts are a timestamped snapshot, not a live display. Integrator checks and all five argon systems passed on all four configurations. Further water systems passed individually, but a partial analysis is not a full suite pass. Original trajectory lengths and thresholds are unchanged.
 
